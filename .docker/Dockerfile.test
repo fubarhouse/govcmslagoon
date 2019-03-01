@@ -10,13 +10,16 @@ RUN /app/sanitize.sh \
 
 COPY .docker/images/test/drutiny /usr/bin/drutiny
 
-ENV SITE_AUDIT_VERSION 7.x-3.x
-RUN wget https://github.com/govcms/audit-site/archive/$SITE_AUDIT_VERSION.tar.gz \
-    && tar -C /tmp -xzvf $SITE_AUDIT_VERSION.tar.gz \
-    && rm $SITE_AUDIT_VERSION.tar.gz \
+ENV SITE_AUDIT_NAMEPACE fubarhouse
+ENV SITE_AUDIT_FILENAME issue-GOVCMS-2414
+ENV SITE_AUDIT_VERSION issue/GOVCMS-2414
+
+RUN wget https://github.com/$SITE_AUDIT_NAMEPACE/audit-site/archive/$SITE_AUDIT_VERSION.tar.gz -O SITE_AUDIT_FILENAME.tar.gz \
+    && tar -C /tmp -xzvf SITE_AUDIT_FILENAME.tar.gz \
+    && rm SITE_AUDIT_FILENAME.tar.gz \
     && mkdir -p /app/sites/all/drutiny \
-    && mv /tmp/audit-site-$SITE_AUDIT_VERSION/* /app/sites/all/drutiny \
-    && rm -Rf /tmp/audit-site-$SITE_AUDIT_VERSION \
+    && mv /tmp/audit-site-SITE_AUDIT_FILENAME/* /app/sites/all/drutiny \
+    && rm -Rf /tmp/audit-site-SITE_AUDIT_FILENAME \
     && php -d memory_limit=-1 /usr/local/bin/composer --working-dir=/app/sites/all/drutiny/ install --ignore-platform-reqs \
     && chmod +x /usr/bin/drutiny
 
